@@ -3,8 +3,9 @@ package main
 import (
 	"log"
 
+	"github.com/go-pesa/internal/utils"
+
 	"github.com/go-pesa/internal/globals"
-	"github.com/go-pesa/internal/types"
 )
 
 func init() {
@@ -12,9 +13,5 @@ func init() {
 }
 
 func main() {
-	var task types.Task
-
-	task.ID = "12"
-
-	log.Printf(globals.ConsumerSecret)
+	log.Printf(utils.EncodeConsumerKey())
 }
