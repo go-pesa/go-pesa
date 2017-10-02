@@ -2,7 +2,6 @@ package http
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -11,7 +10,8 @@ import (
 	"github.com/google/go-querystring/query"
 )
 
-func get(endpoint string, headers []types.Header, queryStrings interface{}) []byte {
+//Get is a http get
+func Get(endpoint string, headers []types.Header, queryStrings interface{}) *http.Response {
 
 	var params string
 	if queryStrings == nil {
@@ -40,12 +40,6 @@ func get(endpoint string, headers []types.Header, queryStrings interface{}) []by
 		log.Fatal(fmt.Sprintf("Unable to send get request, error:%s", err))
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("Unable to process response body, error:%s", err))
-	}
-	defer res.Body.Close()
-
-	return body
+	return res
 
 }

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/bluele/gcache"
 	"github.com/joho/godotenv"
 )
 
@@ -16,22 +17,25 @@ var (
 	//ConsumerKey is the mpesa consumer key, please set it with envirnment variables as MPESA_CONSUMER_KEY
 	ConsumerKey string
 	//sandboxURL is the mpesa sandbox url
-	sandboxURL = "https://production.safaricom.co.ke/"
+	sandboxURL = "https://sandbox.safaricom.co.ke/"
 	//productionURL is the mpesa api production URL
 	productionURL = "https://production.safaricom.co.ke/" //TO-DO: Update with correct URL
+	//Cache to hold temporary info like auth tokens
+	Cache gcache.Cache
 )
 
 //InitConfig initializes global variables and all other environment variables
 func InitConfig() {
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Using os environment variables")
-	} else {
-		log.Println("Using .env for configuration")
-	}
+	Cache = gcache.
+		New(20).
+		LRU().
+		Build()
+
+	_ = godotenv.Load()
 
 	BaseURL = setEnvironment(os.Getenv("APP_ENV"))
+
 	setVariable(os.Getenv("MPESA_CONSUMER_KEY"), &ConsumerKey, "M-pesa Consumer Key")
 	setVariable(os.Getenv("MPESA_CONSUMER_SECRET"), &ConsumerSecret, "M-pesa Consumer Secret")
 
