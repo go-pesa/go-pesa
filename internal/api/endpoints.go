@@ -4,4 +4,5 @@ var (
 	oauthGenerate         = "oauth/v1/generate"
 	stkpushQuery          = "mpesa/stkpushquery/v1/query"
 	stkpushProcessRequest = "mpesa/stkpush/v1/processrequest"
+	balanceRequest        = "mpesa/accountbalance/v1/query"
 )
