@@ -13,5 +13,6 @@ func init() {
 func main() {
 
 	log.Printf("Yo World!")
+	// api.RequestBalance(globals.InitiatorShortCode, 4, "hello")
 
 }

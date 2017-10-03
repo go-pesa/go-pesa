@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"fmt"
 	"log"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/bluele/gcache"
 	"github.com/go-pesa/internal/certs"
+
 	"github.com/joho/godotenv"
 )
 
@@ -43,6 +45,10 @@ var (
 	mpesaSecret string
 	//SecurityCredential encrypted MpesaSecret
 	SecurityCredential string
+	//QueueTimeOutURL M-pesa queue timeout URL
+	QueueTimeOutURL string
+	//BalanceResultURL M-pesa balance result URL
+	BalanceResultURL string
 )
 
 //InitConfig initializes global variables and all other environment variables
@@ -65,6 +71,8 @@ func InitConfig() {
 	setVariable(os.Getenv("MPESA_INITIATOR_CODE_1"), &Initiator, "M-pesa initiator")
 	setVariable(os.Getenv("MPESA_SHORTCODE_1"), &InitiatorShortCode, "M-pesa initiator shortcode")
 	setVariable(os.Getenv("MPESA_SECRET"), &mpesaSecret, "M-pesa secret for security credentials")
+	setVariable(os.Getenv("MPESA_QUEUE_TIMEOUT_URL"), &QueueTimeOutURL, "M-pesa queue timeout URL")
+	setVariable(os.Getenv("MPESA_BALANCE_RESULT_URL"), &BalanceResultURL, "M-pesa balance result URL")
 	SecurityCredential = makeSecurityCredential()
 
 }
@@ -101,5 +109,6 @@ func makeSecurityCredential() string {
 	if err != nil {
 		log.Fatalf("decrypt: %s", err)
 	}
-	return string(out)
+	return base64.URLEncoding.EncodeToString(out)
+
 }
