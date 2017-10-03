@@ -1,8 +1,12 @@
 package http
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+
 	"net/http"
 
 	"github.com/go-pesa/internal/globals"
@@ -39,6 +43,36 @@ func Get(endpoint string, headers []types.Header, queryStrings interface{}) *htt
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Unable to send get request, error:%s", err))
 	}
+
+	return res
+
+}
+
+//Post is a http post
+func Post(endpoint string, headers []types.Header, payload interface{}) *http.Response {
+
+	url := fmt.Sprintf("%s%s", globals.BaseURL, endpoint)
+	encodedPayload := new(bytes.Buffer)
+	json.NewEncoder(encodedPayload).Encode(payload)
+
+	req, err := http.NewRequest("POST", url, encodedPayload)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Unable to create post request, error:%s", err))
+	}
+	for _, header := range headers {
+		req.Header.Add(header.Key, header.Value)
+	}
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Unable to send post request, error:%s", err))
+	}
+
+	//TODO - Remove when entire API is covered, useful for debugging
+	body, _ := ioutil.ReadAll(res.Body)
+	log.Println(res)
+	log.Println(string(body))
+	//
 
 	return res
 

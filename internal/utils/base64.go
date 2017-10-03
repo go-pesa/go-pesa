@@ -13,3 +13,10 @@ func EncodeConsumerKey() string {
 	uEnc := b64.URLEncoding.EncodeToString([]byte(data))
 	return uEnc
 }
+
+//EncodePassword the payload with a ":" separator
+func EncodePassword(shortCode string, businessShortCode string, timestamp string) string {
+	data := fmt.Sprintf("%s%s%s", shortCode, businessShortCode, timestamp)
+	uEnc := b64.URLEncoding.EncodeToString([]byte(data))
+	return uEnc
+}

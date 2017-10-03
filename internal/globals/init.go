@@ -22,6 +22,14 @@ var (
 	productionURL = "https://production.safaricom.co.ke/" //TO-DO: Update with correct URL
 	//Cache to hold temporary info like auth tokens
 	Cache gcache.Cache
+	//ShortCode from env
+	ShortCode string
+	//PassKey from env
+	PassKey string
+	//Callback url for mpesa transactions
+	Callback string
+	//MSISDN is the MSISDN
+	MSISDN string
 )
 
 //InitConfig initializes global variables and all other environment variables
@@ -36,6 +44,10 @@ func InitConfig() {
 
 	BaseURL = setEnvironment(os.Getenv("APP_ENV"))
 
+	setVariable(os.Getenv("MPESA_TEST_MSISDN"), &MSISDN, "M-pesa MSISDN")
+	setVariable(os.Getenv("MPESA_CALLBACK_URL"), &Callback, "M-pesa Callback")
+	setVariable(os.Getenv("LIPA_NA_MPESA_PASSKEY"), &PassKey, "M-pesa PassKey")
+	setVariable(os.Getenv("LIPA_NA_MPESA_SHORTCODE"), &ShortCode, "M-pesa ShortCode")
 	setVariable(os.Getenv("MPESA_CONSUMER_KEY"), &ConsumerKey, "M-pesa Consumer Key")
 	setVariable(os.Getenv("MPESA_CONSUMER_SECRET"), &ConsumerSecret, "M-pesa Consumer Secret")
 

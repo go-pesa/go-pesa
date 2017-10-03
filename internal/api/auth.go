@@ -16,7 +16,7 @@ import (
 //generateToken generates an AccessToken
 func generateToken() string {
 
-	endpoint := "oauth/v1/generate"
+	endpoint := oauthGenerate
 
 	var headers = []types.Header{
 		types.Header{
@@ -39,14 +39,13 @@ func generateToken() string {
 
 }
 
-//GetToken either retrives token from Cache or Get a new one
-func GetToken() string {
+//getToken either retrives token from Cache or Get a new one
+func getToken() string {
 	token, err := fetchToken()
 	if err != nil {
 		return generateToken()
 	}
 	return fmt.Sprintf("%s", token)
-
 }
 
 //cacheToken caches token with the expiry time received from API
