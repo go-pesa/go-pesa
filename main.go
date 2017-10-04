@@ -16,6 +16,7 @@ func main() {
 
 	log.Printf("Yo World!")
 	// x, _ := strconv.Atoi(globals.InitiatorShortCode)
-	api.MakeB2CPayment(10, 254792561905, 602948, "BusinessPayment", "Hello test", "test")
-
+	// api.ReverseTransaction("LJ38IOUAHY",)
+	// api.StkPushProcess(1, 254792561905, "test", "test")
+	api.ReverseTransaction("LJ40JBB8N8", 1, 602948, 4, "testtes", "test")
 }

@@ -9,4 +9,6 @@ var (
 	simulateC2B           = "mpesa/c2b/v1/simulate"
 	processB2B            = "/mpesa/b2b/v1/paymentrequest"
 	processC2B            = "/mpesa/b2c/v1/paymentrequest"
+	transactionStatus     = "mpesa/transactionstatus/v1/query"
+	reverseTransaction    = "mpesa/reversal/v1/request"
 )
