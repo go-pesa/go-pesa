@@ -11,10 +11,3 @@ type BalanceRequest struct {
 	QueueTimeOutURL    string `json:"QueueTimeOutURL"`
 	ResultURL          string `json:"ResultURL"`
 }
-
-//BalanceResponse is the response object
-type BalanceResponse struct {
-	OriginatorConverstionID string `json:"OriginatorConverstionID"`
-	ConversationID          string `json:"ConversationID"`
-	ResponseDescription     string `json:"ResponseDescription"`
-}

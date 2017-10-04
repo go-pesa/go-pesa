@@ -49,6 +49,10 @@ var (
 	QueueTimeOutURL string
 	//BalanceResultURL M-pesa balance result URL
 	BalanceResultURL string
+	//ValidationURL c2B validation URL
+	ValidationURL string
+	//ConfirmationURL c2B confirmation URL
+	ConfirmationURL string
 )
 
 //InitConfig initializes global variables and all other environment variables
@@ -73,6 +77,8 @@ func InitConfig() {
 	setVariable(os.Getenv("MPESA_SECRET"), &mpesaSecret, "M-pesa secret for security credentials")
 	setVariable(os.Getenv("MPESA_QUEUE_TIMEOUT_URL"), &QueueTimeOutURL, "M-pesa queue timeout URL")
 	setVariable(os.Getenv("MPESA_BALANCE_RESULT_URL"), &BalanceResultURL, "M-pesa balance result URL")
+	setVariable(os.Getenv("MPESA_VALIDATION_URL"), &ValidationURL, "M-pesa validation URL")
+	setVariable(os.Getenv("MPESA_CONFIRMATION_URL"), &ConfirmationURL, "M-pesa balance result URL")
 	SecurityCredential = makeSecurityCredential()
 
 }

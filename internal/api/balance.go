@@ -10,7 +10,7 @@ import (
 )
 
 //RequestBalance requests for balance of entity
-func RequestBalance(party string, identifier int, remarks string) types.BalanceResponse {
+func RequestBalance(party string, identifier int, remarks string) types.GenericResponse {
 	endpoint := balanceRequest
 	pushObject := &types.BalanceRequest{
 		CommandID:          "AccountBalance",
@@ -39,7 +39,7 @@ func RequestBalance(party string, identifier int, remarks string) types.BalanceR
 
 	res := http.Post(endpoint, headers, pushObject)
 
-	var balanceResponse types.BalanceResponse
+	var balanceResponse types.GenericResponse
 
 	utils.Unmarshal(res, &balanceResponse)
 
