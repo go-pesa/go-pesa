@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"strconv"
 
 	"github.com/go-pesa/internal/api"
 
@@ -16,7 +15,7 @@ func init() {
 func main() {
 
 	log.Printf("Yo World!")
-	x, _ := strconv.Atoi(globals.InitiatorShortCode)
-	api.MakeB2BPayment(10, 600000, 4, x, 4, "BusinessToBusinessTransfer", "xcv12de", "sadasd asc")
+	// x, _ := strconv.Atoi(globals.InitiatorShortCode)
+	api.MakeB2CPayment(10, 254792561905, 602948, "BusinessPayment", "Hello test", "test")
 
 }
