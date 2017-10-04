@@ -11,7 +11,7 @@ import (
 
 //MakeB2CPayment does a B2C payment
 func MakeB2CPayment(amount int, phoneNumber int, sender int, command string, remarks string, occasion string) types.GenericResponse {
-	endpoint := processB2B
+	endpoint := processC2B
 
 	pushObject := &types.B2Cpayment{
 		CommandID:          command,
