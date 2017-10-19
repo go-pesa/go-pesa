@@ -1,6 +1,6 @@
 package types
 
-//B2Cpayment payment from buisness to customer
+//B2Cpayment payment from business to customer
 type B2Cpayment struct {
 	InitiatorName      string `json:"InitiatorName"`
 	SecurityCredential string `json:"SecurityCredential"`

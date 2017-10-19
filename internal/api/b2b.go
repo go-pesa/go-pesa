@@ -1,7 +1,7 @@
 package api
 
 // //MakeB2BPayment does a B2B payment
-// func MakeB2BPayment(amount int, receiver int, receiverType int, sender int, senderType int, command string, refrence string, remarks string) types.GenericResponse {
+// func MakeB2BPayment(amount int, receiver int, receiverType int, sender int, senderType int, command string, reference string, remarks string) types.GenericResponse {
 // 	endpoint := processB2B
 
 // 	pushObject := &types.B2BPaymentRequest{
@@ -16,7 +16,7 @@ package api
 // 		SecurityCredential:     globals.SecurityCredential,
 // 		QueueTimeOutURL:        globals.QueueTimeOutURL,
 // 		ResultURL:              globals.BalanceResultURL,
-// 		AccountReference:       refrence,
+// 		AccountReference:       reference,
 // 	}
 // 	var headers = []types.Header{
 // 		types.Header{

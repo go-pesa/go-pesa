@@ -22,7 +22,6 @@ func (client *Client) StkPush(amount, customerPhone int, ref, desc string) types
 	endpoint := stkpushProcessRequest
 	businessShortCode := strconv.Itoa(client.ShortCode)
 	password := utils.EncodePassword(businessShortCode, client.PassKey, timestamp)
-
 	pushObject := &types.StkPush{
 		BusinessShortCode: businessShortCode,
 		Timestamp:         timestamp,
