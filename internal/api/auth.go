@@ -6,22 +6,22 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-pesa/internal/globals"
+	"github.com/bluele/gcache"
 
-	"github.com/go-pesa/internal/http"
-	"github.com/go-pesa/internal/types"
-	"github.com/go-pesa/internal/utils"
+	"github.com/go-pesa/go-pesa/internal/http"
+	"github.com/go-pesa/go-pesa/internal/types"
+	"github.com/go-pesa/go-pesa/internal/utils"
 )
 
 //generateToken generates an AccessToken
-func generateToken() string {
+func generateToken(key, secret, baseURL string, cache gcache.Cache) string {
 
 	endpoint := oauthGenerate
 
 	var headers = []types.Header{
 		types.Header{
 			Key:   "Authorization",
-			Value: fmt.Sprintf("Basic %s", utils.EncodeConsumerKey()),
+			Value: fmt.Sprintf("Basic %s", utils.EncodeConsumerKey(key, secret)),
 		},
 	}
 
@@ -29,36 +29,36 @@ func generateToken() string {
 		GrantType: "client_credentials",
 	}
 
-	res := http.Get(endpoint, headers, params)
+	res := http.Get(endpoint, baseURL, headers, params)
 
 	var token types.AccessToken
 
 	utils.Unmarshal(res, &token)
-	cacheToken(token)
+	cacheToken(token, cache)
 	return token.AccessToken
 
 }
 
 //getToken either retrives token from Cache or Get a new one
-func getToken() string {
-	token, err := fetchToken()
+func getToken(key, secret, baseURL string, cache gcache.Cache) string {
+	token, err := fetchToken(cache)
 	if err != nil {
-		return generateToken()
+		return generateToken(key, secret, baseURL, cache)
 	}
 	return fmt.Sprintf("%s", token)
 }
 
 //cacheToken caches token with the expiry time received from API
-func cacheToken(token types.AccessToken) {
+func cacheToken(token types.AccessToken, cache gcache.Cache) {
 	expiry, err := strconv.Atoi(token.ExpiresIn)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error converting expiry to string, error:%s", err))
 	}
-	globals.Cache.SetWithExpire("Token", token.AccessToken, time.Duration(expiry-100)*time.Second)
+	cache.SetWithExpire("Token", token.AccessToken, time.Duration(expiry-100)*time.Second)
 }
 
 //fetches stored token if not expired
-func fetchToken() (interface{}, error) {
-	value, err := globals.Cache.Get("Token")
+func fetchToken(cache gcache.Cache) (interface{}, error) {
+	value, err := cache.Get("Token")
 	return value, err
 }

@@ -9,13 +9,12 @@ import (
 
 	"net/http"
 
-	"github.com/go-pesa/internal/globals"
-	"github.com/go-pesa/internal/types"
+	"github.com/go-pesa/go-pesa/internal/types"
 	"github.com/google/go-querystring/query"
 )
 
 //Get is a http get
-func Get(endpoint string, headers []types.Header, queryStrings interface{}) *http.Response {
+func Get(endpoint, baseURL string, headers []types.Header, queryStrings interface{}) *http.Response {
 
 	var params string
 	if queryStrings == nil {
@@ -29,12 +28,15 @@ func Get(endpoint string, headers []types.Header, queryStrings interface{}) *htt
 		params = fmt.Sprintf("?%s", q.Encode())
 	}
 
-	url := fmt.Sprintf("%s%s%s", globals.BaseURL, endpoint, params)
+	url := fmt.Sprintf("%s%s%s", baseURL, endpoint, params)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Unable to create get request, error:%s", err))
 	}
+
+	req.Header.Add("content-type", "application/json")
+	req.Header.Add("cache-control", "no-cache")
 	for _, header := range headers {
 		req.Header.Add(header.Key, header.Value)
 	}
@@ -49,9 +51,9 @@ func Get(endpoint string, headers []types.Header, queryStrings interface{}) *htt
 }
 
 //Post is a http post
-func Post(endpoint string, headers []types.Header, payload interface{}) *http.Response {
+func Post(endpoint, baseURL string, headers []types.Header, payload interface{}) *http.Response {
 
-	url := fmt.Sprintf("%s%s", globals.BaseURL, endpoint)
+	url := fmt.Sprintf("%s%s", baseURL, endpoint)
 	encodedPayload := new(bytes.Buffer)
 	json.NewEncoder(encodedPayload).Encode(payload)
 
@@ -59,9 +61,12 @@ func Post(endpoint string, headers []types.Header, payload interface{}) *http.Re
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Unable to create post request, error:%s", err))
 	}
+	req.Header.Add("content-type", "application/json")
+	req.Header.Add("cache-control", "no-cache")
 	for _, header := range headers {
 		req.Header.Add(header.Key, header.Value)
 	}
+	log.Println(req)
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {

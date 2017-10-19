@@ -1,1 +1,5 @@
 .env
+test.go
+gopesa-sources.jar
+gopesa.aar
+build

@@ -2,51 +2,48 @@ package api
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
-	"github.com/go-pesa/internal/globals"
-
-	"github.com/go-pesa/internal/http"
-	"github.com/go-pesa/internal/types"
-	"github.com/go-pesa/internal/utils"
+	"github.com/go-pesa/go-pesa/internal/http"
+	"github.com/go-pesa/go-pesa/internal/types"
+	"github.com/go-pesa/go-pesa/internal/utils"
 )
 
-//StkPushProcess creates an stk push
-func StkPushProcess(amount int, customerPhone int, ref string, desc string) types.StkResponse {
+//StkPush creates an stk push(charges a customer by creating a SIM tool kit pop-up)
+func (client *Client) StkPush(amount, customerPhone int, ref, desc string) types.StkResponse {
+	var stkresponse types.StkResponse
+
+	if check("stkpush", client) {
+		return stkresponse
+	}
+
 	timestamp := time.Now().Format("20060102150405")
 	endpoint := stkpushProcessRequest
-	password := utils.EncodePassword(globals.ShortCode, globals.PassKey, timestamp)
+	businessShortCode := strconv.Itoa(client.ShortCode)
+	password := utils.EncodePassword(businessShortCode, client.PassKey, timestamp)
+
 	pushObject := &types.StkPush{
-		BusinessShortCode: globals.ShortCode,
+		BusinessShortCode: businessShortCode,
 		Timestamp:         timestamp,
 		Password:          password,
 		TransactionType:   "CustomerPayBillOnline",
 		Amount:            amount,
-		PartyA:            globals.MSISDN,
-		PartyB:            globals.ShortCode,
+		PartyA:            fmt.Sprintf("%v", client.MSISDN),
+		PartyB:            businessShortCode,
 		PhoneNumber:       customerPhone,
-		CallBackURL:       globals.Callback,
+		CallBackURL:       client.TransactionCallback,
 		AccountReference:  ref,
 		TransactionDesc:   desc,
 	}
 	var headers = []types.Header{
 		types.Header{
 			Key:   "authorization",
-			Value: fmt.Sprintf("Bearer %s", getToken()),
-		},
-		types.Header{
-			Key:   "content-type",
-			Value: "application/json",
-		},
-		types.Header{
-			Key:   "cache-control",
-			Value: "no-cache",
+			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.Cache)),
 		},
 	}
 
-	res := http.Post(endpoint, headers, pushObject)
-
-	var stkresponse types.StkResponse
+	res := http.Post(endpoint, client.ProductionURL, headers, pushObject)
 
 	utils.Unmarshal(res, &stkresponse)
 
@@ -54,12 +51,17 @@ func StkPushProcess(amount int, customerPhone int, ref string, desc string) type
 }
 
 //StkPushQuery queries an stk push
-func StkPushQuery(CheckoutRequestID string) types.StkResponse {
+func (client *Client) StkPushQuery(CheckoutRequestID string) types.StkResponse {
+
+	var stkresponse types.StkResponse
+	if check("stkpush", client) {
+		return stkresponse
+	}
 	timestamp := time.Now().Format("20060102150405")
 	endpoint := stkpushQuery
-	password := utils.EncodePassword(globals.ShortCode, globals.PassKey, timestamp)
+	password := utils.EncodePassword(fmt.Sprintf("%v", client.ShortCode), client.PassKey, timestamp)
 	pushObject := &types.StkPushQuery{
-		BusinessShortCode: globals.ShortCode,
+		BusinessShortCode: fmt.Sprintf("%v", client.ShortCode),
 		Password:          password,
 		Timestamp:         timestamp,
 		CheckoutRequestID: CheckoutRequestID,
@@ -67,21 +69,11 @@ func StkPushQuery(CheckoutRequestID string) types.StkResponse {
 	var headers = []types.Header{
 		types.Header{
 			Key:   "authorization",
-			Value: fmt.Sprintf("Bearer %s", getToken()),
-		},
-		types.Header{
-			Key:   "content-type",
-			Value: "application/json",
-		},
-		types.Header{
-			Key:   "cache-control",
-			Value: "no-cache",
+			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.Cache)),
 		},
 	}
 
-	res := http.Post(endpoint, headers, pushObject)
-
-	var stkresponse types.StkResponse
+	res := http.Post(endpoint, client.ProductionURL, headers, pushObject)
 
 	utils.Unmarshal(res, &stkresponse)
 

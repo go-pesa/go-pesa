@@ -1,22 +1,29 @@
-package main
+package gopesa
 
 import (
-	"log"
-
-	"github.com/go-pesa/internal/api"
-
-	"github.com/go-pesa/internal/globals"
+	"github.com/bluele/gcache"
+	"github.com/go-pesa/go-pesa/internal/api"
 )
 
-func init() {
-	globals.InitConfig()
-}
+//New creates a new client object
+func New(key, secret string, opts ...api.Option) *api.Client {
 
-func main() {
+	c := &api.Client{
+		MSISDN:              254708374149,
+		Secret:              secret,
+		Key:                 key,
+		ProductionURL:       "https://sandbox.safaricom.co.ke/",
+		PassKey:             "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",
+		TransactionCallback: "https://pay-pesa.firebaseio.com/pay.json",
+		ShortCode:           174379,
+		Cache:               gcache.New(20).LRU().Build(),
+		Initiator:           "apiop71",
+		BusinessShortCode:   602948,
+	}
 
-	log.Printf("Yo World!")
-	// x, _ := strconv.Atoi(globals.InitiatorShortCode)
-	// api.ReverseTransaction("LJ38IOUAHY",)
-	// api.StkPushProcess(1, 254792561905, "test", "test")
-	api.ReverseTransaction("LJ40JBB8N8", 1, 602948, 4, "testtes", "test")
+	for _, opt := range opts {
+		opt(c)
+	}
+
+	return c
 }
