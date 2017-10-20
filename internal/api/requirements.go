@@ -25,7 +25,7 @@ func checkStkPushRequirements(client *Client) bool {
 		client.PassKey == "" ||
 		client.TransactionCallback == "" ||
 		client.ShortCode == 0 ||
-		client.MSISDN == 0 {
+		client.MSISDN == "" {
 		log.Println(`Please make sure you have instantiated the client with the following properties\n
 						 1. Key (Consumer Key)\n
 						 2. TransactionCallback (Callback URL for STK push)\n

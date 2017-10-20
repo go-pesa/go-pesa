@@ -9,7 +9,7 @@ type StkPush struct {
 	Amount            int    `json:"Amount"`
 	PartyA            string `json:"PartyA"`
 	PartyB            string `json:"PartyB"`
-	PhoneNumber       int    `json:"PhoneNumber"`
+	PhoneNumber       string `json:"PhoneNumber"`
 	CallBackURL       string `json:"CallBackURL"`
 	AccountReference  string `json:"AccountReference"`
 	TransactionDesc   string `json:"TransactionDesc"`
