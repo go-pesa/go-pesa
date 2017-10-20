@@ -11,12 +11,12 @@ import (
 )
 
 //StkPush creates an stk push(charges a customer by creating a SIM tool kit pop-up)
-func (client *Client) StkPush(amount, customerPhone int, ref, desc string) types.StkResponse {
+func (client *Client) StkPush(amount int, customerPhone, ref, desc string) types.StkResponse {
 	var stkresponse types.StkResponse
 
-	if check("stkpush", client) {
-		return stkresponse
-	}
+	// if check("stkpush", client) {
+	// 	return stkresponse
+	// }
 
 	timestamp := time.Now().Format("20060102150405")
 	endpoint := stkpushProcessRequest
@@ -38,7 +38,7 @@ func (client *Client) StkPush(amount, customerPhone int, ref, desc string) types
 	var headers = []types.Header{
 		types.Header{
 			Key:   "authorization",
-			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.Cache)),
+			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.cache)),
 		},
 	}
 
@@ -68,7 +68,7 @@ func (client *Client) StkPushQuery(CheckoutRequestID string) types.StkResponse {
 	var headers = []types.Header{
 		types.Header{
 			Key:   "authorization",
-			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.Cache)),
+			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.cache)),
 		},
 	}
 

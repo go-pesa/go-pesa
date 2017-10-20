@@ -37,7 +37,7 @@ func (client *Client) CheckIdentity(customerPhone int) types.StkResponse {
 	var headers = []types.Header{
 		types.Header{
 			Key:   "authorization",
-			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.Cache)),
+			Value: fmt.Sprintf("Bearer %s", getToken(client.Key, client.Secret, client.ProductionURL, client.cache)),
 		},
 	}
 

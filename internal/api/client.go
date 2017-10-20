@@ -21,9 +21,9 @@ type Client struct {
 	//TransactionCallback is the Callback url for mpesa transactions
 	TransactionCallback string
 	//MSISDN is the MSISDN provided by Safaricom
-	MSISDN int64
+	MSISDN string
 	//Cache to hold temporary info like auth tokens
-	Cache gcache.Cache
+	cache gcache.Cache
 	//Initiator as defined by the docmentation
 	Initiator string
 	// //InitiatorShortCode is the shortcode for initiator transactions
@@ -46,4 +46,17 @@ type Client struct {
 }
 
 //Option is used to configure the API
-type Option func(c *Client) Option
+type Option func(c *Client)
+
+//Options is an array of client options
+type Options []Option
+
+//Add appends an option to the Options
+func (opts *Options) Add(opt Option) Options {
+	return append(*opts, opt)
+}
+
+//BuildCache creates the cache object
+func (client *Client) BuildCache() {
+	client.cache = gcache.New(20).LRU().Build()
+}
